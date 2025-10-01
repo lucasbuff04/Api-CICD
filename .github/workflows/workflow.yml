@@ -5,12 +5,15 @@ on:
     branches: [ main, develop ]
   pull_request:
     branches: [ main, develop ]
+  schedule:
+    - cron: '0 9 * * *'
   workflow_dispatch:
 
 jobs:
   test:
     name: Run API Tests with Newman
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
@@ -20,9 +23,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'false'  # desabilita totalmente cache de npm
+          cache: 'false'  # desativa o cache para evitar npm ci
 
-      - name: Verify Node and npm versions
+      - name: Verify Node and npm
         run: |
           node -v
           npm -v
@@ -78,3 +81,8 @@ jobs:
           echo "## Newman Test Execution Summary" >> $GITHUB_STEP_SUMMARY
           echo "✅ Tests completed with Postman/Newman" >> $GITHUB_STEP_SUMMARY
           echo "📊 Check artifacts for detailed reports" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Reports Generated:" >> $GITHUB_STEP_SUMMARY
+          echo "- HTML Report (Interactive)" >> $GITHUB_STEP_SUMMARY
+          echo "- JSON Report (Programmatic)" >> $GITHUB_STEP_SUMMARY
+          echo "- JUnit XML Report (CI/CD Integration)" >> $GITHUB_STEP_SUMMARY
