@@ -48,6 +48,9 @@ jobs:
             --reporter-junit-export reports/junit/report.xml
         continue-on-error: false
 
+      - name: List JUnit files for debug
+        run: ls -l reports/junit/
+
       - name: Upload HTML report
         uses: actions/upload-artifact@v4
         with:
@@ -72,7 +75,7 @@ jobs:
       - name: Publish JUnit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
-          junit_files: reports/junit/*.xml
+          files: reports/junit/*.xml
           check_name: Newman API Test Results
 
       - name: Test Summary
