@@ -72,13 +72,6 @@ jobs:
           path: reports/junit/
           retention-days: 30
 
-      - name: Publish JUnit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        with:
-          files: reports/junit/*.xml
-          check_name: Newman API Test Results
-          github_token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
-
       - name: Test Summary
         run: |
           echo "## Newman Test Execution Summary" >> $GITHUB_STEP_SUMMARY
