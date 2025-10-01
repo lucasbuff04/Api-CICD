@@ -1,0 +1,21 @@
+{
+  "name": "api-test-automation",
+  "version": "1.0.0",
+  "description": "Automação de testes de API para gerenciamento de usuários usando Postman/Newman",
+  "scripts": {
+    "test": "newman run postman/collection.json -e postman/environment.json -r cli,html,json,junit --reporter-html-export reports/html/report.html --reporter-json-export reports/json/report.json --reporter-junit-export reports/junit/report.xml",
+    "test:dev": "newman run postman/collection.json -e postman/environment.json -r cli",
+    "test:verbose": "newman run postman/collection.json -e postman/environment.json -r cli --verbose",
+    "test:folder": "newman run postman/collection.json -e postman/environment.json --folder",
+    "build": "node -e \"const fs = require('fs'); ['reports', 'reports/html', 'reports/json', 'reports/junit'].forEach(dir => !fs.existsSync(dir) && fs.mkdirSync(dir, {recursive: true})); console.log('Build completed: Reports directories created');\"",
+    "test:ci": "npm run build && npm test",
+    "validate": "node -e \"try { JSON.parse(require('fs').readFileSync('postman/collection.json', 'utf8')); console.log('Collection is valid'); } catch(e) { console.error('Invalid collection:', e.message); process.exit(1); }\""
+  },
+  "keywords": ["api", "testing", "automation", "postman", "newman"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "newman": "^6.1.1",
+    "newman-reporter-htmlextra": "^1.23.1"
+  }
+}

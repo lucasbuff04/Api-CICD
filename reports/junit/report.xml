@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="API Test Automation - Gerenciamento de Usuários" tests="30" time="6.223">
+  <testsuite name="01 - Autenticação / TC001 - Login com credenciais válidas" id="5a39f143-5e53-430d-9f34-427a2cd29407" timestamp="2025-10-01T21:46:33.681Z" tests="4" failures="0" errors="0" time="0.178">
+    <testcase name="TC001 - Status code é 200" time="0.178" classname="01AutenticacaoTc001LoginComCredenciaisValidas"/>
+    <testcase name="TC001 - Resposta contém token" time="0.178" classname="01AutenticacaoTc001LoginComCredenciaisValidas"/>
+    <testcase name="TC001 - Mensagem de sucesso" time="0.178" classname="01AutenticacaoTc001LoginComCredenciaisValidas"/>
+    <testcase name="TC001 - Tempo de resposta &lt; 2s" time="0.178" classname="01AutenticacaoTc001LoginComCredenciaisValidas"/>
+  </testsuite>
+  <testsuite name="01 - Autenticação / TC002 - Login com email inválido" id="ef02397e-3083-4915-8b7d-97c28c78d0a6" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.176">
+    <testcase name="TC002 - Status code é 401" time="0.176" classname="01AutenticacaoTc002LoginComEmailInvalido"/>
+    <testcase name="TC002 - Mensagem de erro apropriada" time="0.176" classname="01AutenticacaoTc002LoginComEmailInvalido"/>
+  </testsuite>
+  <testsuite name="01 - Autenticação / TC003 - Login com senha inválida" id="a515a664-71f4-4451-81ab-7870eaf76561" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.173">
+    <testcase name="TC003 - Status code é 401" time="0.173" classname="01AutenticacaoTc003LoginComSenhaInvalida"/>
+    <testcase name="TC003 - Mensagem de erro apropriada" time="0.173" classname="01AutenticacaoTc003LoginComSenhaInvalida"/>
+  </testsuite>
+  <testsuite name="01 - Autenticação / TC004 - Login sem email" id="bee91258-a017-46ce-afcc-2ff1a6961aec" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.173">
+    <testcase name="TC004 - Status code é 400" time="0.173" classname="01AutenticacaoTc004LoginSemEmail"/>
+    <testcase name="TC004 - Mensagem de validação" time="0.173" classname="01AutenticacaoTc004LoginSemEmail"/>
+  </testsuite>
+  <testsuite name="01 - Autenticação / TC005 - Login sem senha" id="57209d6a-a4a1-44c3-beba-29c1f4644801" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.177">
+    <testcase name="TC005 - Status code é 400" time="0.177" classname="01AutenticacaoTc005LoginSemSenha"/>
+    <testcase name="TC005 - Mensagem de validação" time="0.177" classname="01AutenticacaoTc005LoginSemSenha"/>
+  </testsuite>
+  <testsuite name="02 - Criar Usuários / TC006 - Criar usuário não administrador" id="596350ae-914e-4ecc-8d3a-a50ac2d79bca" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.176">
+    <testcase name="TC006 - Status code é 201" time="0.176" classname="02CriarUsuariosTc006CriarUsuarioNaoAdministrador"/>
+    <testcase name="TC006 - Usuário criado com sucesso" time="0.176" classname="02CriarUsuariosTc006CriarUsuarioNaoAdministrador"/>
+  </testsuite>
+  <testsuite name="02 - Criar Usuários / TC007 - Criar usuário administrador" id="0ad88517-aff5-4514-9b7d-1d39ababc5ad" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.177">
+    <testcase name="TC007 - Status code é 201" time="0.177" classname="02CriarUsuariosTc007CriarUsuarioAdministrador"/>
+    <testcase name="TC007 - Admin criado com sucesso" time="0.177" classname="02CriarUsuariosTc007CriarUsuarioAdministrador"/>
+  </testsuite>
+  <testsuite name="02 - Criar Usuários / TC008 - Criar usuário com email duplicado" id="371c1172-a249-42ea-a93d-768ff6d3a3fd" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.174">
+    <testcase name="TC008 - Status code é 400" time="0.174" classname="02CriarUsuariosTc008CriarUsuarioComEmailDuplicado"/>
+    <testcase name="TC008 - Mensagem de email duplicado" time="0.174" classname="02CriarUsuariosTc008CriarUsuarioComEmailDuplicado"/>
+  </testsuite>
+  <testsuite name="02 - Criar Usuários / TC009 - Criar usuário sem nome" id="b3494043-c784-4b1e-92ea-95ec54a3bdb2" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.171">
+    <testcase name="TC009 - Status code é 400" time="0.171" classname="02CriarUsuariosTc009CriarUsuarioSemNome"/>
+    <testcase name="TC009 - Mensagem de validação" time="0.171" classname="02CriarUsuariosTc009CriarUsuarioSemNome"/>
+  </testsuite>
+  <testsuite name="02 - Criar Usuários / TC010 - Criar usuário sem email" id="082e7a54-56f9-45a9-b8f3-544d67963943" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.174">
+    <testcase name="TC010 - Status code é 400" time="0.174" classname="02CriarUsuariosTc010CriarUsuarioSemEmail"/>
+    <testcase name="TC010 - Mensagem de validação" time="0.174" classname="02CriarUsuariosTc010CriarUsuarioSemEmail"/>
+  </testsuite>
+  <testsuite name="02 - Criar Usuários / TC011 - Criar usuário sem senha" id="f6d740f2-0da7-465f-a7ed-e4717a6e7908" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.174">
+    <testcase name="TC011 - Status code é 400" time="0.174" classname="02CriarUsuariosTc011CriarUsuarioSemSenha"/>
+    <testcase name="TC011 - Mensagem de validação" time="0.174" classname="02CriarUsuariosTc011CriarUsuarioSemSenha"/>
+  </testsuite>
+  <testsuite name="02 - Criar Usuários / TC012 - Criar usuário sem campo administrador" id="ce64e3af-8a05-45dc-a2cf-f61596cb438d" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.173">
+    <testcase name="TC012 - Status code é 400" time="0.173" classname="02CriarUsuariosTc012CriarUsuarioSemCampoAdministrador"/>
+    <testcase name="TC012 - Mensagem de validação" time="0.173" classname="02CriarUsuariosTc012CriarUsuarioSemCampoAdministrador"/>
+  </testsuite>
+  <testsuite name="02 - Criar Usuários / TC013 - Criar usuário com email inválido" id="76296e43-d762-432b-a3ea-9c2a3d8e5a2d" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.173">
+    <testcase name="TC013 - Status code é 400" time="0.173" classname="02CriarUsuariosTc013CriarUsuarioComEmailInvalido"/>
+    <testcase name="TC013 - Mensagem de validação de email" time="0.173" classname="02CriarUsuariosTc013CriarUsuarioComEmailInvalido"/>
+  </testsuite>
+  <testsuite name="03 - Listar e Buscar Usuários / TC014 - Listar todos os usuários" id="feed0962-44b9-4680-a6db-cf10d9b7414d" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.544">
+    <testcase name="TC014 - Status code é 200" time="0.544" classname="03ListarEBuscarUsuariosTc014ListarTodosOsUsuarios"/>
+    <testcase name="TC014 - Resposta contém lista de usuários" time="0.544" classname="03ListarEBuscarUsuariosTc014ListarTodosOsUsuarios"/>
+  </testsuite>
+  <testsuite name="03 - Listar e Buscar Usuários / TC015 - Buscar usuário por ID válido" id="fc93b0e7-e054-434a-ac3c-ec1d3d8b64d6" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.173">
+    <testcase name="TC015 - Status code é 200" time="0.173" classname="03ListarEBuscarUsuariosTc015BuscarUsuarioPorIdValido"/>
+    <testcase name="TC015 - Dados do usuário retornados" time="0.173" classname="03ListarEBuscarUsuariosTc015BuscarUsuarioPorIdValido"/>
+  </testsuite>
+  <testsuite name="03 - Listar e Buscar Usuários / TC016 - Buscar usuário por ID inexistente" id="51129194-bc1e-41b0-8274-c3e91a7d1509" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.177">
+    <testcase name="TC016 - Status code é 400" time="0.177" classname="03ListarEBuscarUsuariosTc016BuscarUsuarioPorIdInexistente"/>
+    <testcase name="TC016 - Mensagem de usuário não encontrado" time="0.177" classname="03ListarEBuscarUsuariosTc016BuscarUsuarioPorIdInexistente"/>
+  </testsuite>
+  <testsuite name="03 - Listar e Buscar Usuários / TC017 - Filtrar usuários por nome" id="30c0d27f-7b62-44cc-9b4a-76562c21270e" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.178">
+    <testcase name="TC017 - Status code é 200" time="0.178" classname="03ListarEBuscarUsuariosTc017FiltrarUsuariosPorNome"/>
+    <testcase name="TC017 - Filtro aplicado corretamente" time="0.178" classname="03ListarEBuscarUsuariosTc017FiltrarUsuariosPorNome"/>
+  </testsuite>
+  <testsuite name="03 - Listar e Buscar Usuários / TC018 - Filtrar usuários por email" id="303f033e-fde2-4609-bb1d-2d249a7f7947" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.178">
+    <testcase name="TC018 - Status code é 200" time="0.178" classname="03ListarEBuscarUsuariosTc018FiltrarUsuariosPorEmail"/>
+    <testcase name="TC018 - Filtro por email funciona" time="0.178" classname="03ListarEBuscarUsuariosTc018FiltrarUsuariosPorEmail"/>
+  </testsuite>
+  <testsuite name="03 - Listar e Buscar Usuários / TC019 - Listar apenas administradores" id="ab0103fa-3368-4f58-af05-642dccda39cf" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.254">
+    <testcase name="TC019 - Status code é 200" time="0.254" classname="03ListarEBuscarUsuariosTc019ListarApenasAdministradores"/>
+    <testcase name="TC019 - Apenas admins retornados" time="0.254" classname="03ListarEBuscarUsuariosTc019ListarApenasAdministradores"/>
+  </testsuite>
+  <testsuite name="04 - Atualizar Usuários / TC020 - Atualizar usuário com dados válidos" id="a3703068-58a6-4b21-8dd8-6c444b00f296" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.177">
+    <testcase name="TC020 - Status code é 200" time="0.177" classname="04AtualizarUsuariosTc020AtualizarUsuarioComDadosValidos"/>
+    <testcase name="TC020 - Usuário atualizado com sucesso" time="0.177" classname="04AtualizarUsuariosTc020AtualizarUsuarioComDadosValidos"/>
+  </testsuite>
+  <testsuite name="04 - Atualizar Usuários / TC021 - Atualizar usuário para administrador" id="c6b86b59-e2cc-4de6-9727-76eae1df54dc" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.182">
+    <testcase name="TC021 - Status code é 200" time="0.182" classname="04AtualizarUsuariosTc021AtualizarUsuarioParaAdministrador"/>
+    <testcase name="TC021 - Atualização bem-sucedida" time="0.182" classname="04AtualizarUsuariosTc021AtualizarUsuarioParaAdministrador"/>
+  </testsuite>
+  <testsuite name="04 - Atualizar Usuários / TC022 - Atualizar com email duplicado" id="e70d6bac-46da-4dc8-8ac9-c160afc558b3" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.178">
+    <testcase name="TC022 - Status code é 400" time="0.178" classname="04AtualizarUsuariosTc022AtualizarComEmailDuplicado"/>
+    <testcase name="TC022 - Mensagem de email duplicado" time="0.178" classname="04AtualizarUsuariosTc022AtualizarComEmailDuplicado"/>
+  </testsuite>
+  <testsuite name="04 - Atualizar Usuários / TC023 - Atualizar usuário inexistente" id="85886091-b859-46b6-8bb8-828a474c0766" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.178">
+    <testcase name="TC023 - Status code é 201" time="0.178" classname="04AtualizarUsuariosTc023AtualizarUsuarioInexistente"/>
+    <testcase name="TC023 - Novo cadastro criado" time="0.178" classname="04AtualizarUsuariosTc023AtualizarUsuarioInexistente"/>
+  </testsuite>
+  <testsuite name="04 - Atualizar Usuários / TC024 - Atualizar sem nome" id="fbb0683f-f1e7-4804-9dcf-aa2c5f6e0237" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.176">
+    <testcase name="TC024 - Status code é 400" time="0.176" classname="04AtualizarUsuariosTc024AtualizarSemNome"/>
+    <testcase name="TC024 - Mensagem de validação" time="0.176" classname="04AtualizarUsuariosTc024AtualizarSemNome"/>
+  </testsuite>
+  <testsuite name="04 - Atualizar Usuários / TC025 - Atualizar com email inválido" id="099a0da8-4cd9-4b6e-9713-4dae62366f33" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.174">
+    <testcase name="TC025 - Status code é 400" time="0.174" classname="04AtualizarUsuariosTc025AtualizarComEmailInvalido"/>
+    <testcase name="TC025 - Mensagem de validação de email" time="0.174" classname="04AtualizarUsuariosTc025AtualizarComEmailInvalido"/>
+  </testsuite>
+  <testsuite name="05 - Deletar Usuários / TC026 - Deletar usuário existente" id="05fbe6f6-3dae-4797-8b35-24a231c81682" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.173">
+    <testcase name="TC026 - Status code é 200" time="0.173" classname="05DeletarUsuariosTc026DeletarUsuarioExistente"/>
+    <testcase name="TC026 - Usuário excluído com sucesso" time="0.173" classname="05DeletarUsuariosTc026DeletarUsuarioExistente"/>
+  </testsuite>
+  <testsuite name="05 - Deletar Usuários / TC027 - Deletar usuário inexistente" id="54b5dc12-fb82-4468-a0c0-0f1b4cd58947" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.171">
+    <testcase name="TC027 - Status code é 200" time="0.171" classname="05DeletarUsuariosTc027DeletarUsuarioInexistente"/>
+    <testcase name="TC027 - Mensagem de não encontrado" time="0.171" classname="05DeletarUsuariosTc027DeletarUsuarioInexistente"/>
+  </testsuite>
+  <testsuite name="05 - Deletar Usuários / TC028 - Verificar exclusão na listagem" id="55de3793-8e87-4342-8d1d-a9b4d2f664ad" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.254">
+    <testcase name="TC028 - Status code é 200" time="0.254" classname="05DeletarUsuariosTc028VerificarExclusaoNaListagem"/>
+    <testcase name="TC028 - Usuário não aparece na lista" time="0.254" classname="05DeletarUsuariosTc028VerificarExclusaoNaListagem"/>
+  </testsuite>
+  <testsuite name="06 - Testes de Integração / TC029 - Fluxo CRUD completo" id="74b6e2ff-329b-4a3f-bdf4-9a623f4edd96" timestamp="2025-10-01T21:46:33.681Z" tests="1" failures="0" errors="0" time="0.187">
+    <testcase name="TC029 - Fluxo CRUD executado" time="0.187" classname="06TestesDeIntegracaoTc029FluxoCrudCompleto"/>
+  </testsuite>
+  <testsuite name="06 - Testes de Integração / TC030 - Validar estrutura de resposta" id="edd7b4f1-8454-4a5e-a5e5-84f2617e251f" timestamp="2025-10-01T21:46:33.681Z" tests="2" failures="0" errors="0" time="0.244">
+    <testcase name="TC030 - Status code é 200" time="0.244" classname="06TestesDeIntegracaoTc030ValidarEstruturaDeResposta"/>
+    <testcase name="TC030 - Estrutura de resposta válida" time="0.244" classname="06TestesDeIntegracaoTc030ValidarEstruturaDeResposta"/>
+  </testsuite>
+</testsuites>

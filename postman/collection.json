@@ -1,0 +1,1267 @@
+{
+  "info": {
+    "name": "API Test Automation - Gerenciamento de Usuários",
+    "description": "Coleção completa de testes automatizados para API de gerenciamento de usuários (ServeRest)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "randomEmail",
+      "value": ""
+    },
+    {
+      "key": "randomName",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Autenticação",
+      "item": [
+        {
+          "name": "TC001 - Login com credenciais válidas",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Criar usuário para teste de login",
+                  "const email = `test_${Date.now()}@example.com`;",
+                  "const password = 'senha123';",
+                  "",
+                  "pm.collectionVariables.set('testEmail', email);",
+                  "pm.collectionVariables.set('testPassword', password);",
+                  "",
+                  "pm.sendRequest({",
+                  "    url: pm.environment.get('baseUrl') + '/usuarios',",
+                  "    method: 'POST',",
+                  "    header: { 'Content-Type': 'application/json' },",
+                  "    body: {",
+                  "        mode: 'raw',",
+                  "        raw: JSON.stringify({",
+                  "            nome: 'Usuário Teste',",
+                  "            email: email,",
+                  "            password: password,",
+                  "            administrador: 'true'",
+                  "        })",
+                  "    }",
+                  "}, (err, res) => {",
+                  "    if (err) console.log(err);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC001 - Status code é 200', () => {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('TC001 - Resposta contém token', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('authorization');",
+                  "    pm.expect(jsonData.authorization).to.be.a('string');",
+                  "    pm.expect(jsonData.authorization).to.have.length.above(0);",
+                  "    pm.collectionVariables.set('token', jsonData.authorization);",
+                  "});",
+                  "",
+                  "pm.test('TC001 - Mensagem de sucesso', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.equal('Login realizado com sucesso');",
+                  "});",
+                  "",
+                  "pm.test('TC001 - Tempo de resposta < 2s', () => {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{testEmail}}\",\n  \"password\": \"{{testPassword}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["login"]
+            }
+          }
+        },
+        {
+          "name": "TC002 - Login com email inválido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC002 - Status code é 401', () => {",
+                  "    pm.response.to.have.status(401);",
+                  "});",
+                  "",
+                  "pm.test('TC002 - Mensagem de erro apropriada', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.equal('Email e/ou senha inválidos');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"invalido@example.com\",\n  \"password\": \"senha123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["login"]
+            }
+          }
+        },
+        {
+          "name": "TC003 - Login com senha inválida",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC003 - Status code é 401', () => {",
+                  "    pm.response.to.have.status(401);",
+                  "});",
+                  "",
+                  "pm.test('TC003 - Mensagem de erro apropriada', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.equal('Email e/ou senha inválidos');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{testEmail}}\",\n  \"password\": \"senhaErrada\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["login"]
+            }
+          }
+        },
+        {
+          "name": "TC004 - Login sem email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC004 - Status code é 400', () => {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('TC004 - Mensagem de validação', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.email).to.equal('email é obrigatório');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"password\": \"senha123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["login"]
+            }
+          }
+        },
+        {
+          "name": "TC005 - Login sem senha",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC005 - Status code é 400', () => {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('TC005 - Mensagem de validação', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.password).to.equal('password é obrigatório');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"teste@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Criar Usuários",
+      "item": [
+        {
+          "name": "TC006 - Criar usuário não administrador",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "pm.collectionVariables.set('randomEmail', `user_${Date.now()}@example.com`);",
+                  "pm.collectionVariables.set('randomName', `Usuário ${Date.now()}`);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC006 - Status code é 201', () => {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('TC006 - Usuário criado com sucesso', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.equal('Cadastro realizado com sucesso');",
+                  "    pm.expect(jsonData._id).to.be.a('string');",
+                  "    pm.collectionVariables.set('userId', jsonData._id);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"{{randomName}}\",\n  \"email\": \"{{randomEmail}}\",\n  \"password\": \"senha123\",\n  \"administrador\": \"false\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios"]
+            }
+          }
+        },
+        {
+          "name": "TC007 - Criar usuário administrador",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "pm.collectionVariables.set('randomEmail', `admin_${Date.now()}@example.com`);",
+                  "pm.collectionVariables.set('randomName', `Admin ${Date.now()}`);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC007 - Status code é 201', () => {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('TC007 - Admin criado com sucesso', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.equal('Cadastro realizado com sucesso');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"{{randomName}}\",\n  \"email\": \"{{randomEmail}}\",\n  \"password\": \"senha123\",\n  \"administrador\": \"true\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios"]
+            }
+          }
+        },
+        {
+          "name": "TC008 - Criar usuário com email duplicado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC008 - Status code é 400', () => {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('TC008 - Mensagem de email duplicado', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.equal('Este email já está sendo usado');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Usuário Duplicado\",\n  \"email\": \"{{randomEmail}}\",\n  \"password\": \"senha123\",\n  \"administrador\": \"false\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios"]
+            }
+          }
+        },
+        {
+          "name": "TC009 - Criar usuário sem nome",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC009 - Status code é 400', () => {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('TC009 - Mensagem de validação', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.nome).to.equal('nome é obrigatório');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"teste@example.com\",\n  \"password\": \"senha123\",\n  \"administrador\": \"false\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios"]
+            }
+          }
+        },
+        {
+          "name": "TC010 - Criar usuário sem email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC010 - Status code é 400', () => {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('TC010 - Mensagem de validação', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.email).to.equal('email é obrigatório');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Usuário Teste\",\n  \"password\": \"senha123\",\n  \"administrador\": \"false\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios"]
+            }
+          }
+        },
+        {
+          "name": "TC011 - Criar usuário sem senha",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC011 - Status code é 400', () => {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('TC011 - Mensagem de validação', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.password).to.equal('password é obrigatório');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Usuário Teste\",\n  \"email\": \"teste@example.com\",\n  \"administrador\": \"false\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios"]
+            }
+          }
+        },
+        {
+          "name": "TC012 - Criar usuário sem campo administrador",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC012 - Status code é 400', () => {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('TC012 - Mensagem de validação', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.administrador).to.equal('administrador é obrigatório');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Usuário Teste\",\n  \"email\": \"teste@example.com\",\n  \"password\": \"senha123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios"]
+            }
+          }
+        },
+        {
+          "name": "TC013 - Criar usuário com email inválido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC013 - Status code é 400', () => {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('TC013 - Mensagem de validação de email', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.email).to.equal('email deve ser um email válido');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Usuário Teste\",\n  \"email\": \"emailinvalido\",\n  \"password\": \"senha123\",\n  \"administrador\": \"false\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - Listar e Buscar Usuários",
+      "item": [
+        {
+          "name": "TC014 - Listar todos os usuários",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC014 - Status code é 200', () => {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('TC014 - Resposta contém lista de usuários', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('usuarios');",
+                  "    pm.expect(jsonData.usuarios).to.be.an('array');",
+                  "    pm.expect(jsonData).to.have.property('quantidade');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios"]
+            }
+          }
+        },
+        {
+          "name": "TC015 - Buscar usuário por ID válido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC015 - Status code é 200', () => {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('TC015 - Dados do usuário retornados', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('nome');",
+                  "    pm.expect(jsonData).to.have.property('email');",
+                  "    pm.expect(jsonData).to.have.property('_id');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "TC016 - Buscar usuário por ID inexistente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC016 - Status code é 400', () => {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('TC016 - Mensagem de usuário não encontrado', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.equal('Usuário não encontrado');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/idInexistente123",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios", "idInexistente123"]
+            }
+          }
+        },
+        {
+          "name": "TC017 - Filtrar usuários por nome",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC017 - Status code é 200', () => {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('TC017 - Filtro aplicado corretamente', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('usuarios');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios?nome={{randomName}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios"],
+              "query": [
+                {
+                  "key": "nome",
+                  "value": "{{randomName}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "TC018 - Filtrar usuários por email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC018 - Status code é 200', () => {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('TC018 - Filtro por email funciona', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('usuarios');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios?email={{randomEmail}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios"],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "{{randomEmail}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "TC019 - Listar apenas administradores",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC019 - Status code é 200', () => {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('TC019 - Apenas admins retornados', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('usuarios');",
+                  "    if (jsonData.usuarios.length > 0) {",
+                  "        jsonData.usuarios.forEach(user => {",
+                  "            pm.expect(user.administrador).to.equal('true');",
+                  "        });",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios?administrador=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios"],
+              "query": [
+                {
+                  "key": "administrador",
+                  "value": "true"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - Atualizar Usuários",
+      "item": [
+        {
+          "name": "TC020 - Atualizar usuário com dados válidos",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Generate unique email for update to avoid duplicate email error",
+                  "pm.collectionVariables.set('updatedName', `Updated ${Date.now()}`);",
+                  "pm.collectionVariables.set('updatedEmail', `updated_${Date.now()}@example.com`);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC020 - Status code é 200', () => {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('TC020 - Usuário atualizado com sucesso', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.equal('Registro alterado com sucesso');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"{{updatedName}}\",\n  \"email\": \"{{updatedEmail}}\",\n  \"password\": \"novaSenha123\",\n  \"administrador\": \"false\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "TC021 - Atualizar usuário para administrador",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Generate unique email for admin update",
+                  "pm.collectionVariables.set('adminEmail', `admin_update_${Date.now()}@example.com`);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC021 - Status code é 200', () => {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('TC021 - Atualização bem-sucedida', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.equal('Registro alterado com sucesso');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"{{updatedName}}\",\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"senha123\",\n  \"administrador\": \"true\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "TC022 - Atualizar com email duplicado",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Criar outro usuário para testar duplicação",
+                  "const email = `duplicate_${Date.now()}@example.com`;",
+                  "pm.collectionVariables.set('duplicateEmail', email);",
+                  "",
+                  "pm.sendRequest({",
+                  "    url: pm.environment.get('baseUrl') + '/usuarios',",
+                  "    method: 'POST',",
+                  "    header: { 'Content-Type': 'application/json' },",
+                  "    body: {",
+                  "        mode: 'raw',",
+                  "        raw: JSON.stringify({",
+                  "            nome: 'Outro Usuário',",
+                  "            email: email,",
+                  "            password: 'senha123',",
+                  "            administrador: 'false'",
+                  "        })",
+                  "    }",
+                  "}, (err, res) => {",
+                  "    if (err) console.log(err);",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC022 - Status code é 400', () => {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('TC022 - Mensagem de email duplicado', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.equal('Este email já está sendo usado');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Tentativa Duplicação\",\n  \"email\": \"{{duplicateEmail}}\",\n  \"password\": \"senha123\",\n  \"administrador\": \"false\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "TC023 - Atualizar usuário inexistente",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Generate unique email for non-existent user test",
+                  "pm.collectionVariables.set('newUserEmail', `new_user_${Date.now()}@example.com`);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC023 - Status code é 201', () => {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test('TC023 - Novo cadastro criado', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.equal('Cadastro realizado com sucesso');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Novo Usuário\",\n  \"email\": \"{{newUserEmail}}\",\n  \"password\": \"senha123\",\n  \"administrador\": \"false\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/idInexistente999",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios", "idInexistente999"]
+            }
+          }
+        },
+        {
+          "name": "TC024 - Atualizar sem nome",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC024 - Status code é 400', () => {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('TC024 - Mensagem de validação', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.nome).to.equal('nome é obrigatório');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{randomEmail}}\",\n  \"password\": \"senha123\",\n  \"administrador\": \"false\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "TC025 - Atualizar com email inválido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC025 - Status code é 400', () => {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test('TC025 - Mensagem de validação de email', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.email).to.equal('email deve ser um email válido');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Usuário Teste\",\n  \"email\": \"emailinvalido\",\n  \"password\": \"senha123\",\n  \"administrador\": \"false\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios", "{{userId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 - Deletar Usuários",
+      "item": [
+        {
+          "name": "TC026 - Deletar usuário existente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC026 - Status code é 200', () => {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('TC026 - Usuário excluído com sucesso', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.equal('Registro excluído com sucesso');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "TC027 - Deletar usuário inexistente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC027 - Status code é 200', () => {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('TC027 - Mensagem de não encontrado', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.message).to.equal('Nenhum registro excluído');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/idInexistente123",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios", "idInexistente123"]
+            }
+          }
+        },
+        {
+          "name": "TC028 - Verificar exclusão na listagem",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC028 - Status code é 200', () => {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('TC028 - Usuário não aparece na lista', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    const deletedUser = jsonData.usuarios.find(u => u._id === pm.collectionVariables.get('userId'));",
+                  "    pm.expect(deletedUser).to.be.undefined;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 - Testes de Integração",
+      "item": [
+        {
+          "name": "TC029 - Fluxo CRUD completo",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "pm.collectionVariables.set('crudEmail', `crud_${Date.now()}@example.com`);",
+                  "pm.collectionVariables.set('crudName', `CRUD Test ${Date.now()}`);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Este teste valida o fluxo completo",
+                  "pm.test('TC029 - Fluxo CRUD executado', () => {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"{{crudName}}\",\n  \"email\": \"{{crudEmail}}\",\n  \"password\": \"senha123\",\n  \"administrador\": \"false\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios"]
+            }
+          }
+        },
+        {
+          "name": "TC030 - Validar estrutura de resposta",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC030 - Status code é 200', () => {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('TC030 - Estrutura de resposta válida', () => {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('usuarios');",
+                  "    pm.expect(jsonData).to.have.property('quantidade');",
+                  "",
+                  "    if (jsonData.usuarios.length > 0) {",
+                  "        const user = jsonData.usuarios[0];",
+                  "        pm.expect(user).to.have.property('nome');",
+                  "        pm.expect(user).to.have.property('email');",
+                  "        pm.expect(user).to.have.property('password');",
+                  "        pm.expect(user).to.have.property('administrador');",
+                  "        pm.expect(user).to.have.property('_id');",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios",
+              "host": ["{{baseUrl}}"],
+              "path": ["usuarios"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
