@@ -75,7 +75,7 @@ jobs:
       - name: Publish JUnit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
-          files: reports/junit/*.xml
+          junit_files: reports/junit/*.xml
           check_name: Newman API Test Results
 
       - name: Test Summary
