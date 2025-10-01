@@ -11,7 +11,7 @@
     "test:ci": "npm run build && npm test",
     "validate": "node -e \"try { JSON.parse(require('fs').readFileSync('postman/collection.json', 'utf8')); console.log('Collection is valid'); } catch(e) { console.error('Invalid collection:', e.message); process.exit(1); }\""
   },
-  "keywords": ["api", "testing", "automation", "postman", "newman"],
+  "keywords": ["api", "testing", "automation", "postman", "newman", "junit"],
   "author": "",
   "license": "MIT",
   "devDependencies": {
