@@ -5,16 +5,12 @@ on:
     branches: [ main, develop ]
   pull_request:
     branches: [ main, develop ]
-  schedule:
-    # Executa diariamente às 9h UTC
-    - cron: '0 9 * * *'
   workflow_dispatch:
 
 jobs:
   test:
     name: Run API Tests with Newman
     runs-on: ubuntu-latest
-    timeout-minutes: 15
 
     steps:
       - name: Checkout code
@@ -24,20 +20,33 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+          cache: 'false'  # desabilita totalmente cache de npm
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Verify Node and npm versions
+        run: |
+          node -v
+          npm -v
 
-      - name: Create reports directory
+      - name: Install project dependencies
+        run: npm install --no-audit --no-fund --legacy-peer-deps
+
+      - name: Install Newman globally
+        run: npm install -g newman newman-reporter-htmlextra
+
+      - name: Create reports directories
         run: mkdir -p reports/html reports/json reports/junit
 
       - name: Run Newman tests
-        run: npm test
+        run: |
+          newman run postman/collection.json \
+            -e postman/environment.json \
+            -r cli,htmlextra,json,junit \
+            --reporter-htmlextra-export reports/html/index.html \
+            --reporter-json-export reports/json/report.json \
+            --reporter-junit-export reports/junit/report.xml
         continue-on-error: false
 
       - name: Upload HTML report
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: newman-html-report
@@ -45,7 +54,6 @@ jobs:
           retention-days: 30
 
       - name: Upload JSON report
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: newman-json-report
@@ -53,28 +61,20 @@ jobs:
           retention-days: 30
 
       - name: Upload JUnit report
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: newman-junit-report
           path: reports/junit/
           retention-days: 30
 
-      - name: Publish test results
-        if: always()
+      - name: Publish JUnit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
-          files: reports/junit/report.xml
+          junit_files: reports/junit/*.xml
           check_name: Newman API Test Results
 
       - name: Test Summary
-        if: always()
         run: |
           echo "## Newman Test Execution Summary" >> $GITHUB_STEP_SUMMARY
           echo "✅ Tests completed with Postman/Newman" >> $GITHUB_STEP_SUMMARY
           echo "📊 Check artifacts for detailed reports" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Reports Generated:" >> $GITHUB_STEP_SUMMARY
-          echo "- HTML Report (Interactive)" >> $GITHUB_STEP_SUMMARY
-          echo "- JSON Report (Programmatic)" >> $GITHUB_STEP_SUMMARY
-          echo "- JUnit XML Report (CI/CD Integration)" >> $GITHUB_STEP_SUMMARY
