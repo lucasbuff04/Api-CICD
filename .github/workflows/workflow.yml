@@ -1,0 +1,84 @@
+name: API Test Automation with Newman
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Executa diariamente às 9h UTC
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run API Tests with Newman
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Create reports directory
+        run: mkdir -p reports/html reports/json reports/junit
+
+      - name: Run Newman tests
+        run: npm test
+        continue-on-error: false
+
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-html-report
+          path: reports/html/
+          retention-days: 30
+
+      - name: Upload JSON report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-json-report
+          path: reports/json/
+          retention-days: 30
+
+      - name: Upload JUnit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-junit-report
+          path: reports/junit/
+          retention-days: 30
+
+      - name: Publish test results
+        if: always()
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: reports/junit/report.xml
+          check_name: Newman API Test Results
+
+      - name: Test Summary
+        if: always()
+        run: |
+          echo "## Newman Test Execution Summary" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Tests completed with Postman/Newman" >> $GITHUB_STEP_SUMMARY
+          echo "📊 Check artifacts for detailed reports" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Reports Generated:" >> $GITHUB_STEP_SUMMARY
+          echo "- HTML Report (Interactive)" >> $GITHUB_STEP_SUMMARY
+          echo "- JSON Report (Programmatic)" >> $GITHUB_STEP_SUMMARY
+          echo "- JUnit XML Report (CI/CD Integration)" >> $GITHUB_STEP_SUMMARY
