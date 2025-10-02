@@ -4,8 +4,8 @@
 
 \`\`\`bash
 # Clone o repositório
-git clone https://github.com/seu-usuario/api-test-automation.git
-cd api-test-automation
+git clone https://github.com/lucasbuff04/Api-CICD
+cd Api-CICD
 
 # Instale as dependências
 npm install
@@ -115,10 +115,9 @@ npm run test:verbose
 ## Próximos Passos
 
 1. ✅ Execute os testes localmente
-2. ✅ Abra o relatório HTML
-3. ✅ Importe no Postman para explorar
-4. ✅ Faça push para GitHub e veja o CI/CD
-5. ✅ Customize os testes conforme necessário
+2. ✅ Importe no Postman para explorar
+3. ✅ Faça push para GitHub e veja o CI/CD
+4. ✅ Customize os testes conforme necessário
 
 ## Recursos
 
@@ -128,5 +127,3 @@ npm run test:verbose
 - [API ServeRest](https://serverest.dev/)
 
 ---
-
-**Dúvidas?** Abra uma issue no repositório!
