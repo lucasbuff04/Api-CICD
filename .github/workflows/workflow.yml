@@ -75,8 +75,8 @@ jobs:
       - name: Test Summary
         run: |
           echo "## Newman Test Execution Summary" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Tests completed with Postman/Newman" >> $GITHUB_STEP_SUMMARY
-          echo "📊 Check artifacts for detailed reports" >> $GITHUB_STEP_SUMMARY
+          echo "Tests completed with Postman/Newman" >> $GITHUB_STEP_SUMMARY
+          echo "Check artifacts for detailed reports" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Reports Generated:" >> $GITHUB_STEP_SUMMARY
           echo "- HTML Report (Interactive)" >> $GITHUB_STEP_SUMMARY

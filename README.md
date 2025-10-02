@@ -43,7 +43,6 @@ Este projeto implementa uma suíte completa de testes automatizados para a API d
 - ✅ Interface visual intuitiva para criar e testar APIs
 - ✅ Scripts de teste em JavaScript com sintaxe simples
 - ✅ Execução via linha de comando com Newman
-- ✅ Relatórios HTML, JSON e JUnit XML
 - ✅ Integração fácil com CI/CD
 - ✅ Variáveis de ambiente e coleções reutilizáveis
 - ✅ Comunidade ativa e documentação extensa
@@ -106,8 +105,8 @@ Este projeto implementa uma suíte completa de testes automatizados para a API d
 ### 1. Clone o repositório
 
 \`\`\`bash
-git clone https://github.com/seu-usuario/api-test-automation.git
-cd api-test-automation
+git clone https://github.com/lucasbuff04/Api-CICD
+cd Api-CICD
 \`\`\`
 
 ### 2. Instale as dependências
@@ -124,10 +123,7 @@ npm install
 npm test
 \`\`\`
 
-Este comando executa todos os testes e gera relatórios em múltiplos formatos:
-- **HTML**: `reports/html/report.html`
-- **JSON**: `reports/json/report.json`
-- **JUnit XML**: `reports/junit/report.xml`
+Este comando executa todos os testes:
 
 ### Executar em modo desenvolvimento (apenas console)
 
@@ -507,5 +503,3 @@ Este projeto demonstra:
 - ✅ Tratamento de cenários positivos e negativos
 
 ---
-
-⭐ **Cobertura: 100% | Testes: 30 | Ferramenta: Postman/Newman | Status: ✅ Passing**
